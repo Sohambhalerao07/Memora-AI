@@ -4,47 +4,82 @@ import Navbar from "../Components/GallaryPage/NavBar";
 import GalleryTips from "../Components/GallaryPage/GalleryTips";
 import PhotoUpload from "../Components/GallaryPage/PhotoUpload";
 import { getDatabase, ref, push } from "firebase/database";
+import { auth } from "../firebase";
 
-export default function CreateGallery() {
+export default function CreateGallery({ onClose }) {
   const [photos, setPhotos] = useState([]);
+  const [photoUrls, setPhotoUrls] = useState([]);
+  const [galleryName, setGalleryName] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
 
+  const saveGallery = async (
+    galleryName,
+    eventDate,
+    eventDescription,
+    photoUrls
+  ) => {
+    const db = getDatabase();
+    const galleryRef = ref(db, "user_galleries");
+
+    await push(galleryRef, {
+      name: galleryName,
+      date: eventDate,
+      description: eventDescription,
+      coverImage: photoUrls[0], // first image as preview
+      photos: photoUrls.map((url) => ({
+        imageUrl: url,
+        timestamp: Date.now(),
+      })),
+    });
+  };
   const saveToDatabase = async (downloadUrl) => {
     const db = getDatabase();
-    const photosRef = ref(db, "user_galleries/gallery_id/photos");
+    const userId = auth.currentUser?.uid;
+    if (!userId) {
+      console.error("User not logged in");
+      return;
+    }
+
+    const photosRef = ref(db, `user_galleries/${userId}/gallery_id/photos`);
+
     await push(photosRef, { imageUrl: downloadUrl, timestamp: Date.now() });
   };
   const handleUpload = async (file) => {
-  try {
-    const formData = new FormData();
-    formData.append("file", file);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
 
-    const response = await fetch("http://localhost:5000/upload", {
-      method: "POST",
-      body: formData,
-    });
+      const response = await fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-    if (!response.ok) { // Check for HTTP errors (e.g., 404, 500)
-      const errorData = await response.json(); // Or response.text()
-      throw new Error(`Upload failed: ${response.status} - ${errorData.message || response.statusText}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          `Upload failed: ${response.status} - ${
+            errorData.message || response.statusText
+          }`
+        );
+      }
+
+      const data = await response.json();
+      const fileUrl = data.url;
+
+      setPhotoUrls((prev) => [...prev, fileUrl]);
+      await saveToDatabase(fileUrl);
+      console.log(`Successfully uploaded and saved ${file.name}`);
+    } catch (error) {
+      console.error("Error uploading or saving file:", file.name, error);
     }
-
-    const data = await response.json();
-    const fileUrl = data.url;
-
-    await saveToDatabase(fileUrl);
-    console.log(`Successfully uploaded and saved ${file.name}`);
-    // Consider updating UI to show success for this file
-  } catch (error) {
-    console.error("Error uploading or saving file:", file.name, error);
-    // Inform the user about the failure (e.g., display an error message next to the file, use a toast notification)
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-4xl mx-auto py-10 px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-2">
-          <div className="flex flex-col ml-auto translate-x-97 ">
+        <div className="md:col-span-2 justify-center">
+          <div className="flex flex-col ml-auto justify-center align-middle ">
             <h1 className="text-4xl font-extrabold text-gray-900 mb-1">
               Create Your New Gallery
             </h1>
@@ -60,8 +95,10 @@ export default function CreateGallery() {
               </label>
               <input
                 type="text"
+                value={galleryName}
+                onChange={(e) => setGalleryName(e.target.value)}
                 placeholder="E.g., Summer Music Festival 2024"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md"
               />
             </div>
 
@@ -71,7 +108,9 @@ export default function CreateGallery() {
               </label>
               <input
                 type="date"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                value={eventDate}
+                onChange={(e) => setEventDate(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md"
               />
             </div>
 
@@ -81,11 +120,13 @@ export default function CreateGallery() {
               </label>
               <textarea
                 rows={4}
-                placeholder="Provide a brief description of your event. This helps organize your memories."
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-              ></textarea>
+                value={eventDescription}
+                onChange={(e) => setEventDescription(e.target.value)}
+                placeholder="Provide a brief description of your event."
+                className="w-full px-4 py-2 border border-gray-300 rounded-md"
+              />
             </div>
-    
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Upload Photos
@@ -100,12 +141,23 @@ export default function CreateGallery() {
 
             <div className="flex justify-end space-x-4">
               <button
+                onClick={onClose}
                 type="button"
                 className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
               >
                 Cancel
               </button>
               <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  saveGallery(
+                    galleryName,
+                    eventDate,
+                    eventDescription,
+                    photoUrls
+                  );
+                  onClose(); // Optionally close modal
+                }}
                 type="submit"
                 className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800"
               >

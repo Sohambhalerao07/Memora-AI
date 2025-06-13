@@ -1,8 +1,12 @@
-import React from 'react';
-import PhotoActions from './PhotoActions';
-
-const PhotoTile = ({ imageUrl, altText, peopleTags, eventTag }) => (
-  <div className="relative group overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100">
+  import React from 'react'
+ import PhotoActions from './PhotoActions';
+const PhotoTile = ({ imageUrl, altText, peopleTags, eventTag }) => {
+  console.log("ImageUrl",imageUrl);
+  console.log("alttest",altText);
+  console.log("peopleTags",peopleTags);
+  console.log("eventTag",eventTag);
+  return (
+    <div className="relative group overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100">
     <img 
       src={imageUrl} 
       alt={altText} 
@@ -22,6 +26,8 @@ const PhotoTile = ({ imageUrl, altText, peopleTags, eventTag }) => (
     </div>
     <PhotoActions />
   </div>
-);
+  )
+}
 
-export default PhotoTile;
+export default PhotoTile
+

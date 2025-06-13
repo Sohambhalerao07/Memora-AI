@@ -1,21 +1,41 @@
-import React from 'react';
+// components/GalleryModal.jsx
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react"; // Optional: install lucide-react or replace with ✕ icon
 
-const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
-
+export default function Modal({ isOpen, onClose, children }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm mt-20 bg-opacity-50">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl p-6 relative">
-        <button
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-xl font-bold"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
         >
-          ×
-        </button>
-        {children}
-      </div>
-    </div>
-  );
-};
+          <motion.div
+            className="relative bg-white rounded-2xl shadow-xl p-6 max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.85 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            {/* Close button */}
+            <button
+              onClick={onClose}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+              aria-label="Close modal"
+            >
+              <X size={20} />
+              {/* Or use: <span className="text-xl">&times;</span> */}
+            </button>
 
-export default Modal;
+            {children}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}

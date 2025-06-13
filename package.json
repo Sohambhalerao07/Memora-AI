@@ -13,6 +13,8 @@
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.8",
     "firebase": "^11.9.0",
+    "framer-motion": "^12.18.1",
+    "lucide-react": "^0.515.0",
     "react": "^19.1.0",
     "react-date-range": "^2.0.1",
     "react-dom": "^19.1.0",

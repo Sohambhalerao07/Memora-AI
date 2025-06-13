@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import LandingPage from './pages/LandingPage';
 import SignupPage from './pages/SignupPage';
 import CreateGalleryPage from './pages/CreateGalleryPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/gallery" element={<CreateGalleryPage />} />
+        <Route path=' /profile' element={<ProfilePage/>}/>
 
       </Routes>
     </Router>
