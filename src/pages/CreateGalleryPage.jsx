@@ -5,6 +5,7 @@ import GalleryTips from "../Components/GallaryPage/GalleryTips";
 import PhotoUpload from "../Components/GallaryPage/PhotoUpload";
 import { getDatabase, ref, push } from "firebase/database";
 import { auth } from "../firebase";
+import AlertModal from "../Components/PopupModel/AlertModal";
 
 export default function CreateGallery({ onClose }) {
   const [photos, setPhotos] = useState([]);
@@ -12,6 +13,7 @@ export default function CreateGallery({ onClose }) {
   const [galleryName, setGalleryName] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [eventDescription, setEventDescription] = useState("");
+  const [alert, setAlert] = useState({ show: false, type: '', message: '' });
 
   const saveGallery = async (
     galleryName,
@@ -26,11 +28,7 @@ export default function CreateGallery({ onClose }) {
       name: galleryName,
       date: eventDate,
       description: eventDescription,
-      coverImage: photoUrls[0], // first image as preview
-      photos: photoUrls.map((url) => ({
-        imageUrl: url,
-        timestamp: Date.now(),
-      })),
+      timestamp: Date.now(),
     });
   };
   const saveToDatabase = async (downloadUrl) => {
@@ -40,10 +38,6 @@ export default function CreateGallery({ onClose }) {
       console.error("User not logged in");
       return;
     }
-
-    const photosRef = ref(db, `user_galleries/${userId}/gallery_id/photos`);
-
-    await push(photosRef, { imageUrl: downloadUrl, timestamp: Date.now() });
   };
   const handleUpload = async (file) => {
     try {
@@ -67,17 +61,16 @@ export default function CreateGallery({ onClose }) {
       const data = await response.json();
       const fileUrl = data.url;
 
-      setPhotoUrls((prev) => [...prev, fileUrl]);
       await saveToDatabase(fileUrl);
-      console.log(`Successfully uploaded and saved ${file.name}`);
+       setAlert({ show: true, type: 'success', message: 'Images uploaded successfully!' });
     } catch (error) {
-      console.error("Error uploading or saving file:", file.name, error);
+     setAlert({ show: true, type: 'error', message: 'Upload failed. Try again.' });
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-4xl mx-auto py-10 px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div className="max-h-[95vh] rounded-xl bg-gray-50 mt-10">
+      <main className="max-w-4xl rounded-2xl mx-auto py-10 px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-2 justify-center">
           <div className="flex flex-col ml-auto justify-center align-middle ">
             <h1 className="text-4xl font-extrabold text-gray-900 mb-1">
@@ -128,15 +121,6 @@ export default function CreateGallery({ onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Upload Photos
-              </label>
-              <PhotoUpload
-                onFilesDrop={(newFiles) => {
-                  setPhotos((prev) => [...prev, ...newFiles]);
-                  newFiles.forEach((file) => handleUpload(file)); // <-- Upload each to backend + DB
-                }}
-              />
             </div>
 
             <div className="flex justify-end space-x-4">
@@ -174,6 +158,13 @@ export default function CreateGallery({ onClose }) {
       <footer className="text-center text-xs text-gray-500 py-4 border-t border-gray-200">
         © 2023 Memora AI. All rights reserved.
       </footer>
+      {alert.show && (
+  <AlertModal
+    type={alert.type}
+    message={alert.message}
+    onClose={() => setAlert({ ...alert, show: false })}
+  />
+)}
     </div>
   );
 }

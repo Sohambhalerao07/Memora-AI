@@ -8,21 +8,21 @@ export default function Modal({ isOpen, onClose, children }) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+          className=" fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
           onClick={onClose}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="relative bg-white rounded-2xl shadow-xl p-6 max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+            className="rounded-2xl p-6 max-w-5xl w-full max-h-[70vh] -mt-65"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.85 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            {/* Close button */}
+            {/* Close button */ }
             <button
               onClick={onClose}
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"

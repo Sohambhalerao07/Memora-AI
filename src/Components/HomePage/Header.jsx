@@ -54,8 +54,8 @@ const IconButton = ({ icon }) => {
 
   return (
     <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 md:h-10 bg-[#e7edf3] text-[#0e141b] min-w-0 px-2.5 hover:bg-[#d0dbe7] transition-colors">
-      <div className="text-[#0e141b]" data-icon={icon} data-size="20px" data-weight="regular">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+      <div className="text-[#0e141b] shadow-2xl hover:shadow-indigo-700" data-icon={icon} data-size="20px" data-weight="regular">
+        <svg  xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
           {icons[icon]}
         </svg>
       </div>

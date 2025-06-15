@@ -40,7 +40,7 @@ def upload_file():
             s3.upload_fileobj(file, bucket_name, object_key)
 
             # ✅ Construct Public URL (assuming public access is enabled on R2 bucket)
-            public_url = f"{os.getenv('R2_PUBLIC_URL')}/{bucket_name}/{object_key}"
+            public_url = f"{os.getenv('R2_PUBLIC_URL')}/{object_key}"
             return jsonify({"url": public_url}), 200
 
         except Exception as e:
