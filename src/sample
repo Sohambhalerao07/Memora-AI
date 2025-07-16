@@ -26,4 +26,4 @@
 //     } catch (error) {
 //      setAlert({ show: true, type: 'error', message: 'Upload failed. Try again.' });
 //     }
-//   };
+//   };facerec-env\Scripts\activate

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { auth } from "../../firebase"; // adjust path
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
+
 const SignupForm = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");

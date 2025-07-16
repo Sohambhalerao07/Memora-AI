@@ -1,5 +1,8 @@
 import React, { useState,useEffect } from 'react';
 import profile from "../../assets/profile.png"
+import axios from 'axios';
+import { getDatabase, ref, set } from "firebase/database";
+import { auth } from "../../firebase";
 import AlertModal from '../PopupModel/AlertModal';
 import ProfileTips from './ProfileTips';
 
@@ -36,32 +39,43 @@ useEffect(() => {
     }
   };
 
- const handleSubmit = (e) => {
-  e.preventDefault();
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  // Check if image is uploaded
-  if (!imageFile) {
-    setAlert({ show: true, type: 'error', message: 'Profile photo is required for face recognition.' });
-    return;
-  }
+    if (!imageFile) {
+      return setAlert({...props});
+    }
+    if (!formData.fullName.trim()) {
+      return setAlert({...props});
+    }
 
-  // Basic form validation
-  if (
-    !formData.fullName.trim() ||
-    !formData.email.trim() ||
-    !formData.phoneNumber.trim() ||
-    !formData.country.trim()
-  ) {
-    setAlert({ show: true, type: 'error', message: 'Please fill in all required fields.' });
-    return;
-  }
+    setAlert({ show: true, type: "info", message: "Uploading image..." });
 
-  // Simulate success
-  console.log('Profile saved:', formData);
-  console.log('Uploaded image file:', imageFile);
-  setAlert({ show: true, type: 'success', message: 'Profile saved successfully!' });
-};
+    try {
+      const form = new FormData();
+      form.append("file", imageFile);
 
+      const { data } = await axios.post(
+         "http://localhost:5000/upload",
+        form
+      );
+
+      const imageUrl = data.url;
+      const userId = auth.currentUser.uid;
+      const db = getDatabase();
+
+      await set(ref(db, `users/${userId}`), {
+        ...formData,
+        profileImage: imageUrl,
+        updatedAt: Date.now(),
+      });
+
+      setAlert({ show: true, type: "success", message: "Profile saved!" });
+    } catch (err) {
+      console.error(err);
+      setAlert({ show: true, type: "error", message: "Upload or save failed." });
+    }
+  };
 
 
 const handleRemoveImage = () => {
@@ -129,17 +143,6 @@ return (
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Your email"
-              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Phone number</label>
             <input
               type="tel"
@@ -195,6 +198,16 @@ return (
           Save profile
         </button>
       </div>
+       <div> {/* existing JSX */}
+
+      {alert.show && (
+        <AlertModal
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert({ ...alert, show: false })}
+        />
+      )}
+    </div>
     </div>
   );
 };

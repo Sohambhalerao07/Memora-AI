@@ -5,6 +5,7 @@ import HeroSection from "../Components/LoginPage/HeroSection";
 import LoginForm from "../Components/LoginPage/LoginForm";
 import SocioLogin from "../Components/LoginPage/SocioLogin";
 import FooterLinks from "../Components/LoginPage/FooterLinks";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const LoginPage = () => {
   return (

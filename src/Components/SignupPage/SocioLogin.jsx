@@ -4,7 +4,7 @@ import { auth } from "../../firebase";
 import {
   GoogleAuthProvider,
   FacebookAuthProvider,
-  signInWithPopup,
+  signInWithPopup
 } from "firebase/auth";
 import { facebookProvider, googleProvider } from "../../firebase";
 
