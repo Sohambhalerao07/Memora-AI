@@ -17,6 +17,7 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
+# Cloudflare R2 Config
 s3 = boto3.client(
     's3',
     endpoint_url=os.getenv("R2_ENDPOINT_URL"),
@@ -24,9 +25,10 @@ s3 = boto3.client(
     aws_secret_access_key=os.getenv("R2_SECRET_ACCESS_KEY")
 )
 
-cred = credentials.Certificate("serviceAccountKey.json")   
+# Firebase Admin Init
+cred = credentials.Certificate("serviceAccountKey.json")  # 🔁 replace with your actual JSON path
 firebase_admin.initialize_app(cred, {
-    'databaseURL': os.getenv("FIREBASE_DB_URL")  
+    'databaseURL': os.getenv("FIREBASE_DB_URL")  # 🔁 add to your .env
 })
 
 
@@ -39,16 +41,20 @@ def upload_file():
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
 
+    # Get gallery name from form
     gallery_name = request.form.get("galleryName", "Faces Code")
 
     try:
-        img_bytes = file.read() 
+        # Read file into OpenCV image for DeepFace
+        img_bytes = file.read()
         image_np = np.frombuffer(img_bytes, np.uint8)
         image_cv2 = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
 
+        # Face detection
         detections = DeepFace.extract_faces(img_path=image_cv2, enforce_detection=False)
         print(f"🔍 Detected {len(detections)} face(s)")
 
+        # Rewind file to upload to R2
         file.stream.seek(0)
         original_filename = secure_filename(file.filename)
         file_ext = os.path.splitext(original_filename)[1]
@@ -58,10 +64,11 @@ def upload_file():
         s3.upload_fileobj(file, os.getenv("R2_BUCKET_NAME"), object_key)
         public_url = f"{os.getenv('R2_PUBLIC_URL')}/{object_key}"
 
+        # Save to Firebase
         gallery_ref = db.reference(f"user_galleries/{gallery_name}/faces")
         
         for detection in detections:
-            face_id = str(uuid.uuid4()) 
+            face_id = str(uuid.uuid4())  # ⚠️ TEMPORARY: you can later match embeddings to reuse IDs
             person_ref = gallery_ref.child(face_id)
             existing = person_ref.get()
 
