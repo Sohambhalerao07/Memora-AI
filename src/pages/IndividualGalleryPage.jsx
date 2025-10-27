@@ -111,7 +111,7 @@ useEffect(() => {
       <div key={face.id}>
         <div className="flex items-center gap-4 mb-2">
           <FaceAvatar
-            name="Soham"
+            name={face.name}
             imageUrl={face.imageUrl}
             status={face.status}
           />
