@@ -16,10 +16,10 @@ function Header() {
     </div>
     <div className="flex flex-1 justify-end gap-8">
       <nav className="flex items-center gap-9">
-        <a href="#">Features</a>
-        <a href="#">Pricing</a>
-        <a href="#">Enterprise</a>
-        <a href="#">Resources</a>
+        <a href="/features">Features</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/enterprise">Enterprise</a>
+        <a href="/resources">Resources</a>
       </nav>
       <div className="flex gap-2">
         <button className="h-10 px-4 rounded-xl bg-black text-white text-sm font-bold hover:bg-indigo-600 " onClick={()=> navigate("/signup")}>Sign up</button>
