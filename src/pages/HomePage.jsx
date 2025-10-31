@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../Components/HomePage/NavBar'
+import Navbar from '../Components/HomePage/Navbar'
 import WelcomeBanner from '../Components/HomePage/WelcomeBanner'
 import Sidebar from '../Components/HomePage/Sidebar'
 import PhotoGrid from '../Components/HomePage/PhotoGrid'
