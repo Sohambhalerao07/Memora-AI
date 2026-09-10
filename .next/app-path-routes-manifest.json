@@ -1,0 +1,18 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/admin/page": "/admin",
+  "/api/v1/admin/route": "/api/v1/admin",
+  "/api/v1/galleries/[id]/match/route": "/api/v1/galleries/[id]/match",
+  "/api/v1/galleries/[id]/photos/route": "/api/v1/galleries/[id]/photos",
+  "/api/v1/galleries/[id]/route": "/api/v1/galleries/[id]",
+  "/api/v1/galleries/[id]/status/route": "/api/v1/galleries/[id]/status",
+  "/api/v1/galleries/route": "/api/v1/galleries",
+  "/api/v1/tenants/route": "/api/v1/tenants",
+  "/dashboard/galleries/[id]/page": "/dashboard/galleries/[id]",
+  "/dashboard/page": "/dashboard",
+  "/g/[slug]/page": "/g/[slug]",
+  "/login/page": "/login",
+  "/page": "/",
+  "/signup/page": "/signup"
+}

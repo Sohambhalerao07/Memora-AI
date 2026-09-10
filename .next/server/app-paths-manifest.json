@@ -1,0 +1,18 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/v1/admin/route": "app/api/v1/admin/route.js",
+  "/api/v1/galleries/[id]/match/route": "app/api/v1/galleries/[id]/match/route.js",
+  "/api/v1/galleries/[id]/photos/route": "app/api/v1/galleries/[id]/photos/route.js",
+  "/api/v1/galleries/[id]/route": "app/api/v1/galleries/[id]/route.js",
+  "/api/v1/galleries/[id]/status/route": "app/api/v1/galleries/[id]/status/route.js",
+  "/api/v1/galleries/route": "app/api/v1/galleries/route.js",
+  "/api/v1/tenants/route": "app/api/v1/tenants/route.js",
+  "/dashboard/galleries/[id]/page": "app/dashboard/galleries/[id]/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/g/[slug]/page": "app/g/[slug]/page.js",
+  "/login/page": "app/login/page.js",
+  "/page": "app/page.js",
+  "/signup/page": "app/signup/page.js"
+}

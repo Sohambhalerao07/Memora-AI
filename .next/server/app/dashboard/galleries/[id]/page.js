@@ -1,0 +1,13 @@
+var R=require("../../../../chunks/ssr/[turbopack]_runtime.js")("server/app/dashboard/galleries/[id]/page.js")
+R.c("server/chunks/ssr/[root-of-the-server]__1-sxafm._.js")
+R.c("server/chunks/ssr/node_modules_next_dist_1n3w9lb._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__1zd_o4i._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__10ppemx._.js")
+R.c("server/chunks/ssr/src_1me6206._.js")
+R.c("server/chunks/ssr/node_modules_next_dist_client_components_0wpq8j3._.js")
+R.c("server/chunks/ssr/node_modules_next_dist_client_components_builtin_forbidden_0symwr9.js")
+R.c("server/chunks/ssr/node_modules_next_dist_client_components_builtin_unauthorized_0l_sp0x.js")
+R.c("server/chunks/ssr/node_modules_next_dist_client_components_builtin_global-error_0q-w892.js")
+R.c("server/chunks/ssr/_next-internal_server_app_dashboard_galleries_[id]_page_actions_0hi0y_e.js")
+R.m(70673)
+module.exports=R.m(70673).exports
